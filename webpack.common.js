@@ -1,24 +1,30 @@
 // webpack.config.js
 const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
+const TerserPlugin = require("terser-webpack-plugin");
 
 module.exports = {
-  mode: "development",
-  entry: "./src/index.js",
-  output: {
-    filename: "main.js",
-    path: path.resolve(__dirname, "dist"),
-    clean: true,
+  entry: {
+    app: "./src/index.js",
   },
-  devtool: "eval-source-map",
-  devServer: {
-    watchFiles: ["./src/template.html"],
-  },
+
   plugins: [
     new HtmlWebpackPlugin({
-      template: "./src/template.html",
+      title: "Production",
     }),
   ],
+
+  output: {
+    filename: "[name].bundle.js",
+
+    path: path.resolve(__dirname, "dist"),
+
+    clean: true,
+  },
+  optimization: {
+    minimize: true,
+    minimizer: [new TerserPlugin()],
+  },
   module: {
     rules: [
       {
